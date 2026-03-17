@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="64" fill="#E8590C"/>
+  <text x="256" y="310" text-anchor="middle" font-family="Arial Black, Arial" font-weight="900" font-size="172" fill="white">HC</text>
+  <text x="256" y="390" text-anchor="middle" font-family="Arial" font-weight="400" font-size="36" fill="rgba(255,255,255,0.8)" letter-spacing="6">WHITING-TURNER</text>
+</svg>
