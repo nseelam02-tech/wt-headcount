@@ -3,10 +3,10 @@ Name: CI/CD is Easy!
 on:
   push:
      branches:
-           -master
+           -main
   pull:
      branches:
-           -master
+           -main
 
 jobs:
    build:
