@@ -8,7 +8,11 @@ export const DAYS   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Frida
 export const BASE_FIELDS: FieldDef[] = [
   { id:"firstName",      label:"First Name",             section:"basic",  type:"text",      locked:true },
   { id:"lastName",       label:"Last Name",              section:"basic",  type:"text",      locked:true },
+  { id:"employeeTitle",  label:"Employee Title",         section:"basic",  type:"text"  },
   { id:"phone",          label:"Mobile Phone",           section:"basic",  type:"tel"   },
+  { id:"email",          label:"Employee Email",         section:"basic",  type:"email" },
+  { id:"photo",          label:"Employee Photo",         section:"basic",  type:"file"  },
+  { id:"primaryLanguage",label:"Primary Language",       section:"basic",  type:"text"  },
   { id:"emergencyName",  label:"Emergency Contact Name", section:"basic",  type:"text"  },
   { id:"emergencyPhone", label:"Emergency Contact Phone",section:"basic",  type:"tel"   },
   { id:"trade",          label:"Trade / Craft",          section:"basic",  type:"select"},
@@ -29,7 +33,7 @@ export const BASE_FIELDS: FieldDef[] = [
 ];
 
 export const DEFAULT_FIELDS = [
-  "firstName","lastName","phone","trade","employer",
+  "firstName","lastName","employeeTitle","phone","email","photo","primaryLanguage","trade","employer",
   "supervisor","oshaCard","ppeConfirm","safetyAck","drugAck","signature",
 ];
 
@@ -54,6 +58,13 @@ const mkCfg = (p: Partial<FormConfig> = {}): FormConfig => ({
   extraCerts: [],
   requireCertUpload: false,
   ...p,
+});
+
+export const GENERIC_FORM_CONFIG: FormConfig = mkCfg({
+  enabledFields: BASE_FIELDS.map(field => field.id),
+  customTradeOptions: [],
+  extraCerts: [],
+  requireCertUpload: false,
 });
 
 export const SEED_SITES: Site[] = [
@@ -96,17 +107,28 @@ export const SEED_SITES: Site[] = [
 ];
 
 export const SEED_WORKERS: WorkerSubmission[] = [
-  { id:"w1", workerId:"JS412-101", siteId:"s1", site:"One Light Street",  submittedAt:new Date().toISOString(), checkIn:"06:52", firstName:"Marcus",  lastName:"Williams",  phone:"4105550192", trade:"Ironworker",  employer:"Chesapeake Steel LLC",   supervisor:"Tim Boyle",   emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"30",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Marcus Williams" },
-  { id:"w2", workerId:"JS412-102", siteId:"s1", site:"One Light Street",  submittedAt:new Date().toISOString(), checkIn:"07:14", firstName:"Darnell", lastName:"Thompson",  phone:"4435550884", trade:"Carpenter",   employer:"Mid-Atlantic Carpentry", supervisor:"Frank Russo", emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"10",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Darnell Thompson" },
-  { id:"w3", workerId:"JS102-101", siteId:"s2", site:"MedStar Pavilion",  submittedAt:new Date().toISOString(), checkIn:"07:05", firstName:"Rosa",    lastName:"Gutierrez", phone:"4105551234", trade:"Electrician", employer:"Bay Electric Co.",        supervisor:"Steve Larkin",emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"30",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Rosa Gutierrez" },
-  { id:"w4", workerId:"JS581-101", siteId:"s3", site:"Harbor East Tower", submittedAt:new Date().toISOString(), checkIn:"07:38", firstName:"Kevin",   lastName:"Hart",      phone:"3015559021", trade:"Plumber",     employer:"Capitol Plumbing",        supervisor:"Dana Mills",  emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"10",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Kevin Hart" },
+  { id:"w1", workerId:"JS412-101", siteId:"s1", site:"One Light Street",  submittedAt:new Date().toISOString(), checkIn:"06:52", firstName:"Marcus",  lastName:"Williams",  employeeTitle:"Journeyman", phone:"4105550192", email:"marcus.williams@example.com", photoName:"", photoDataUrl:"", primaryLanguage:"English", trade:"Ironworker",  employer:"Chesapeake Steel LLC",   supervisor:"Tim Boyle",   emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"30",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},certifications:[],ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Marcus Williams" },
+  { id:"w2", workerId:"JS412-102", siteId:"s1", site:"One Light Street",  submittedAt:new Date().toISOString(), checkIn:"07:14", firstName:"Darnell", lastName:"Thompson",  employeeTitle:"Foreman", phone:"4435550884", email:"darnell.thompson@example.com", photoName:"", photoDataUrl:"", primaryLanguage:"English", trade:"Carpenter",   employer:"Mid-Atlantic Carpentry", supervisor:"Frank Russo", emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"10",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},certifications:[],ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Darnell Thompson" },
+  { id:"w3", workerId:"JS102-101", siteId:"s2", site:"MedStar Pavilion",  submittedAt:new Date().toISOString(), checkIn:"07:05", firstName:"Rosa",    lastName:"Gutierrez", employeeTitle:"Electrician", phone:"4105551234", email:"rosa.gutierrez@example.com", photoName:"", photoDataUrl:"", primaryLanguage:"Spanish", trade:"Electrician", employer:"Bay Electric Co.",        supervisor:"Steve Larkin",emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"30",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},certifications:[],ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Rosa Gutierrez" },
+  { id:"w4", workerId:"JS581-101", siteId:"s3", site:"Harbor East Tower", submittedAt:new Date().toISOString(), checkIn:"07:38", firstName:"Kevin",   lastName:"Hart",      employeeTitle:"Apprentice", phone:"3015559021", email:"kevin.hart@example.com", photoName:"", photoDataUrl:"", primaryLanguage:"English", trade:"Plumber",     employer:"Capitol Plumbing",        supervisor:"Dana Mills",  emergencyName:"",emergencyPhone:"",yearsExp:"",oshaCard:"10",firstAid:false,siteSafety:false,forklift:false,scaffold:false,confined:false,fallProt:false,extraCerts:{},certifications:[],ppeConfirm:true,safetyAck:true,drugAck:true,signature:"Kevin Hart" },
 ];
 
 export const SEED_HC: HeadcountRow[] = [
-  { id:"h1", siteId:"s1", site:"One Light Street",  contractorName:"Chesapeake Steel LLC",   workerName:"Marcus Williams",  date:"2026-03-12", day:"Wednesday", checkIn:"06:52", checkOut:"16:10" },
-  { id:"h2", siteId:"s1", site:"One Light Street",  contractorName:"Mid-Atlantic Carpentry", workerName:"Darnell Thompson", date:"2026-03-12", day:"Wednesday", checkIn:"07:14", checkOut:"16:30" },
-  { id:"h3", siteId:"s2", site:"MedStar Pavilion",  contractorName:"Bay Electric Co.",       workerName:"Rosa Gutierrez",   date:"2026-03-12", day:"Wednesday", checkIn:"07:05", checkOut:"15:55" },
-  { id:"h4", siteId:"s3", site:"Harbor East Tower", contractorName:"Capitol Plumbing",       workerName:"Kevin Hart",       date:"2026-03-12", day:"Wednesday", checkIn:"07:38", checkOut:"" },
+  // ── One Light Street ─────────────────────────────────────────────────────────
+  { id:"h1",  siteId:"s1", site:"One Light Street",  date:"2026-03-24", contractorName:"Maryland Mechanical Systems", contractorRep:"Phil Hoffman",    noOfWorkers:6, hoursWorked:"6-2",        descriptionOfWork:"Temporary chiller water make-up connection",             didAnyAccidents:"No", deliveriesReceived:"Temporary chiller material",      equipmentOnSite:"Tools",             openIssues:"Waiting on materials to start" },
+  { id:"h2",  siteId:"s1", site:"One Light Street",  date:"2026-03-24", contractorName:"Maryland Mechanical Systems", contractorRep:"Phil Hoffman",    noOfWorkers:6, hoursWorked:"6-2",        descriptionOfWork:"Temporary chiller connection to building AHU",           didAnyAccidents:"No", deliveriesReceived:"Temp chiller material",           equipmentOnSite:"Forklift",          openIssues:"None" },
+  { id:"h3",  siteId:"s1", site:"One Light Street",  date:"2026-03-24", contractorName:"Maryland Mechanical Systems", contractorRep:"Phil Hoffman",    noOfWorkers:5, hoursWorked:"6-2",        descriptionOfWork:"Filled, load tested, drain ice water, remove pipe",      didAnyAccidents:"No", deliveriesReceived:"6\" victaulic caps, 8\" tee",     equipmentOnSite:"Forklift",          openIssues:"None" },
+  { id:"h4",  siteId:"s1", site:"One Light Street",  date:"2026-03-24", contractorName:"Windsor Electric",           contractorRep:"Brian Miller",    noOfWorkers:3, hoursWorked:"8",           descriptionOfWork:"Conduit for DP panel and branch circuit",                didAnyAccidents:"No", deliveriesReceived:"No",                              equipmentOnSite:"None",              openIssues:"None" },
+  { id:"h5",  siteId:"s1", site:"One Light Street",  date:"2026-03-24", contractorName:"Windsor Electric",           contractorRep:"Brian Miller",    noOfWorkers:3, hoursWorked:"8",           descriptionOfWork:"Pipe for DP panel",                                      didAnyAccidents:"No", deliveriesReceived:"No",                              equipmentOnSite:"None",              openIssues:"None" },
+  { id:"h6",  siteId:"s1", site:"One Light Street",  date:"2026-03-24", contractorName:"Bfpe",                       contractorRep:"Mark Rzepkowski", noOfWorkers:1, hoursWorked:"7",           descriptionOfWork:"Re run new 4\" main for No. 3 fire pump",                didAnyAccidents:"No", deliveriesReceived:"None",                            equipmentOnSite:"Threading machine", openIssues:"None" },
+  // ── MedStar Pavilion ─────────────────────────────────────────────────────────
+  { id:"h7",  siteId:"s2", site:"MedStar Pavilion",  date:"2026-03-24", contractorName:"Maryland Mechanical Systems", contractorRep:"Phil Hoffman",    noOfWorkers:6, hoursWorked:"6-2",        descriptionOfWork:"Drain glycol, demo pipe, hang new tee",                  didAnyAccidents:"No", deliveriesReceived:"Pre fab tie-in piping",           equipmentOnSite:"Forklift",          openIssues:"Sprinkler pipe removal" },
+  { id:"h8",  siteId:"s2", site:"MedStar Pavilion",  date:"2026-03-24", contractorName:"Windsor Electric",           contractorRep:"Brian Miller",    noOfWorkers:6, hoursWorked:"8-Hour Day", descriptionOfWork:"Set-up and pull 1 LE primary feeder wire",               didAnyAccidents:"No", deliveriesReceived:"None",                            equipmentOnSite:"None",              openIssues:"None" },
+  { id:"h9",  siteId:"s2", site:"MedStar Pavilion",  date:"2026-03-24", contractorName:"Windsor Electric",           contractorRep:"Brian Miller",    noOfWorkers:6, hoursWorked:"8-Hour Day", descriptionOfWork:"Prepping SWGR for feeder terminations",                  didAnyAccidents:"No", deliveriesReceived:"None",                            equipmentOnSite:"None",              openIssues:"None" },
+  { id:"h10", siteId:"s2", site:"MedStar Pavilion",  date:"2026-03-24", contractorName:"Maryland Mechanical Systems", contractorRep:"Phil Hoffman",    noOfWorkers:6, hoursWorked:"6-2",        descriptionOfWork:"Butterfly valve installs, tacked fabricated pipe in 4a, 4b", didAnyAccidents:"No", deliveriesReceived:"Butterfly valves",             equipmentOnSite:"Forklift",          openIssues:"Sprinkler pipe removal" },
+  // ── Harbor East Tower ────────────────────────────────────────────────────────
+  { id:"h11", siteId:"s3", site:"Harbor East Tower", date:"2026-03-24", contractorName:"Maryland Mechanical Systems", contractorRep:"Phil Hoffman",    noOfWorkers:6, hoursWorked:"6-2",        descriptionOfWork:"Panel DP-CMP-100 integration, tacked fabricated pipe",   didAnyAccidents:"No", deliveriesReceived:"None",                            equipmentOnSite:"Forklift",          openIssues:"None" },
+  { id:"h12", siteId:"s3", site:"Harbor East Tower", date:"2026-03-24", contractorName:"Windsor Electric",           contractorRep:"Brian Miller",    noOfWorkers:6, hoursWorked:"8-Hour Day", descriptionOfWork:"Start terminating Panel No. 4 feeders",                  didAnyAccidents:"No", deliveriesReceived:"None",                            equipmentOnSite:"None",              openIssues:"None" },
 ];
 
 // ─── BLE Employee seed data ───────────────────────────────────────────────────
